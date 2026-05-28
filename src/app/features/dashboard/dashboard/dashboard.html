@@ -1,0 +1,587 @@
+<div class="min-h-screen bg-[#020617] text-white p-8">
+
+  <!-- HEADER -->
+
+  <div class="flex items-center justify-between mb-10">
+
+    <div>
+
+      <h1 class="text-6xl font-extrabold leading-tight">
+        Welcome,
+        {{ currentUser?.name }}
+      </h1>
+
+      <p class="text-gray-400 text-2xl mt-3">
+        Employee Workspace Dashboard
+      </p>
+
+    </div>
+
+
+
+    <div class="flex items-center gap-4">
+
+      <div
+        class="bg-orange-500 shadow-orange-500/40 shadow-2xl
+               px-8 py-5 rounded-3xl text-2xl font-bold"
+      >
+        {{ currentUser?.role }}
+      </div>
+
+
+
+      <button
+
+        (click)="logout()"
+
+        class="bg-red-500 hover:bg-red-600
+               transition-all duration-300
+               px-8 py-5 rounded-3xl text-xl font-bold"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- LOADER -->
+
+  @if(isLoading) {
+
+    <div
+      class="flex flex-col items-center justify-center
+             h-[70vh]"
+    >
+
+      <div
+        class="w-24 h-24 border-4 border-orange-500
+               border-t-transparent rounded-full animate-spin"
+      ></div>
+
+      <h2 class="text-5xl font-bold mt-10">
+        Loading Employee Workspace...
+      </h2>
+
+      <p class="text-gray-400 text-xl mt-4">
+        Fetching HRMS modules and employee services
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- DASHBOARD -->
+
+  @if(!isLoading) {
+
+    <!-- STATS -->
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+      @for(stat of employeeStats; track stat.title) {
+
+        <div
+          class="bg-white/10 backdrop-blur-lg
+                 border border-white/10
+                 rounded-3xl p-8
+                 hover:scale-105
+                 transition-all duration-300"
+        >
+
+          <p class="text-gray-400 text-xl">
+            {{ stat.title }}
+          </p>
+
+          <h2 class="text-6xl font-bold mt-4">
+            {{ stat.value }}
+          </h2>
+
+        </div>
+
+      }
+
+    </div>
+
+
+
+    <!-- PROFILE + PAYROLL -->
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+
+      <!-- PROFILE -->
+
+      <div
+        class="bg-white/10 backdrop-blur-lg
+               border border-white/10
+               rounded-3xl p-8"
+      >
+
+        <div class="flex items-center justify-between mb-8">
+
+          <h2 class="text-4xl font-bold">
+            Employee Profile
+          </h2>
+          <span
+          class="px-6 py-3 rounded-full text-lg"
+          [ngClass]="{
+          'bg-green-500/20 text-green-400':
+          employeeProfile?.status === 'Active',
+          'bg-red-500/20 text-red-400':
+          employeeProfile?.status === 'Inactive'
+          }"
+
+>
+
+  {{ employeeProfile?.status }} Employee
+
+</span>
+
+        </div>
+
+
+
+        <div class="grid grid-cols-2 gap-8 text-xl">
+
+          <div>
+
+            <p class="text-gray-400">
+              Employee ID
+            </p>
+
+            <h3 class="font-bold mt-2">
+              {{ employeeProfile.employeeId }}
+            </h3>
+
+          </div>
+
+
+
+          <div>
+
+            <p class="text-gray-400">
+              Department
+            </p>
+
+            <h3 class="font-bold mt-2">
+              {{ employeeProfile.department }}
+            </h3>
+
+          </div>
+
+
+
+          <div>
+
+            <p class="text-gray-400">
+              Work Mode
+            </p>
+
+            <h3 class="font-bold mt-2">
+              {{ employeeProfile.workMode }}
+            </h3>
+
+          </div>
+
+
+
+          <div>
+
+            <p class="text-gray-400">
+              Designation
+            </p>
+
+            <h3 class="font-bold mt-2">
+              {{ employeeProfile.designation }}
+            </h3>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PAYROLL -->
+
+      <div
+        class="bg-white/10 backdrop-blur-lg
+               border border-white/10
+               rounded-3xl p-8"
+      >
+
+        <h2 class="text-4xl font-bold mb-8">
+          Payroll Summary
+        </h2>
+
+
+
+        <div class="space-y-6 text-xl">
+
+          <div class="flex justify-between">
+
+            <span class="text-gray-400">
+              Basic Salary
+            </span>
+
+            <span class="font-bold">
+              {{ salaryDetails.basic }}
+            </span>
+
+          </div>
+
+
+
+          <div class="flex justify-between">
+
+            <span class="text-gray-400">
+              HRA
+            </span>
+
+            <span class="font-bold">
+              {{ salaryDetails.hra }}
+            </span>
+
+          </div>
+
+
+
+          <div class="flex justify-between">
+
+            <span class="text-gray-400">
+              PF
+            </span>
+
+            <span class="font-bold">
+              {{ salaryDetails.pf }}
+            </span>
+
+          </div>
+
+
+
+          <div class="flex justify-between">
+
+            <span class="text-gray-400">
+              Bonus
+            </span>
+
+            <span class="font-bold text-green-400">
+              {{ salaryDetails.bonus }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- TASKS + HOLIDAYS -->
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+
+      <!-- TASKS -->
+
+      <div
+        class="bg-white/10 backdrop-blur-lg
+               border border-white/10
+               rounded-3xl p-8"
+      >
+
+        <h2 class="text-4xl font-bold mb-8">
+          Assigned Tasks
+        </h2>
+
+
+
+        <div class="space-y-5">
+
+          @for(task of tasks; track task.title) {
+
+            <div
+              class="bg-white/5 rounded-2xl p-6
+                     border border-white/5"
+            >
+
+              <div class="flex justify-between items-center">
+
+                <div>
+
+                  <h3 class="text-2xl font-bold">
+                    {{ task.title }}
+                  </h3>
+
+                  <p class="text-gray-400 mt-2">
+                    Priority:
+                    {{ task.priority }}
+                  </p>
+
+                </div>
+
+
+
+                <span
+                  class="bg-blue-500/20 text-blue-400
+                         px-5 py-2 rounded-full"
+                >
+                  {{ task.status }}
+                </span>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+
+      <!-- HOLIDAYS -->
+
+      <div
+        class="bg-white/10 backdrop-blur-lg
+               border border-white/10
+               rounded-3xl p-8"
+      >
+
+        <h2 class="text-4xl font-bold mb-8">
+          Upcoming Holidays
+        </h2>
+
+
+
+        <div class="space-y-5">
+
+          @for(holiday of holidays; track holiday.name) {
+
+            <div
+              class="bg-white/5 rounded-2xl p-6
+                     flex justify-between items-center"
+            >
+
+              <div>
+
+                <h3 class="text-2xl font-bold">
+                  {{ holiday.name }}
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                  Company Holiday
+                </p>
+
+              </div>
+
+
+
+              <span class="text-orange-400 text-2xl font-bold">
+                {{ holiday.date }}
+              </span>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- MEETINGS -->
+
+    <div
+      class="bg-white/10 backdrop-blur-lg
+             border border-white/10
+             rounded-3xl p-8 mb-10"
+    >
+
+      <h2 class="text-4xl font-bold mb-8">
+        Scheduled Meetings
+      </h2>
+
+
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-left">
+
+          <thead>
+
+            <tr class="border-b border-gray-700">
+
+              <th class="pb-4">Meeting ID</th>
+
+              <th class="pb-4">Title</th>
+
+              <th class="pb-4">Team</th>
+
+              <th class="pb-4">Time</th>
+
+              <th class="pb-4">Status</th>
+
+            </tr>
+
+          </thead>
+
+
+
+          <tbody>
+
+            @for(meeting of meetings; track meeting.meetingId) {
+
+              <tr class="border-b border-gray-800">
+
+                <td class="py-5">
+                  {{ meeting.meetingId }}
+                </td>
+
+                <td class="py-5">
+                  {{ meeting.title }}
+                </td>
+
+                <td class="py-5">
+                  {{ meeting.team }}
+                </td>
+
+                <td class="py-5">
+                  {{ meeting.time }}
+                </td>
+
+                <td class="py-5">
+
+                  <span
+                    class="bg-orange-500/20 text-orange-400
+                           px-4 py-2 rounded-full"
+                  >
+                    {{ meeting.status }}
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- EMPLOYEE DIRECTORY -->
+
+    <div
+      class="bg-white/10 backdrop-blur-lg
+             border border-white/10
+             rounded-3xl p-8"
+    >
+
+      <div class="flex items-center justify-between mb-6">
+
+        <h2 class="text-4xl font-bold">
+          Employee Directory
+        </h2>
+
+        <span class="text-gray-400 text-xl">
+          Total Employees: {{ employees.length }}
+        </span>
+
+      </div>
+
+
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-left">
+
+          <thead>
+
+            <tr class="border-b border-gray-700">
+
+              <th class="pb-4">Employee ID</th>
+
+              <th class="pb-4">Name</th>
+
+              <th class="pb-4">Department</th>
+
+              <th class="pb-4">Role</th>
+
+              <th class="pb-4">Status</th>
+
+            </tr>
+
+          </thead>
+
+
+
+          <tbody>
+
+            @for(employee of employees; track employee.id) {
+
+              <tr class="border-b border-gray-800">
+
+                <td class="py-5">
+                  {{ employee.id }}
+                </td>
+
+                <td class="py-5">
+                  {{ employee.name }}
+                </td>
+
+                <td class="py-5">
+                  {{ employee.department }}
+                </td>
+
+                <td class="py-5">
+                  {{ employee.role }}
+                </td>
+
+                <td class="py-5">
+
+                  <span
+                    class="px-6 py-3 rounded-full text-lg"
+                    [ngClass]="{
+                    'bg-green-500/20 text-green-400':
+                    employeeProfile?.status === 'Active',
+                    'bg-red-500/20 text-red-400':
+                    employeeProfile?.status === 'Inactive'
+                    }"
+                  >
+                    {{ employeeProfile?.status }}
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

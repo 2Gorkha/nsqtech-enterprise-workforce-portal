@@ -1,0 +1,559 @@
+<div class="min-h-screen bg-[#0B1120] text-white p-8">
+
+  <!-- HEADER -->
+
+  <div class="flex items-center justify-between mb-12">
+
+    <div>
+
+      <h1 class="text-5xl font-bold">
+        Admin Operations Center
+      </h1>
+
+      <p class="text-gray-400 text-xl mt-3">
+        Workforce Management & Enterprise Control Panel
+      </p>
+
+    </div>
+
+    <div class="flex items-center gap-4">
+
+      <div
+        class="px-7 py-3 rounded-2xl bg-orange-500 shadow-[0_0_40px_rgba(249,115,22,0.7)] text-xl font-semibold"
+      >
+        {{ currentUser?.role }}
+      </div>
+
+      <button
+        (click)="logout()"
+        class="px-6 py-3 rounded-2xl bg-red-500 hover:bg-red-600 transition duration-300 font-semibold"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- LOADER -->
+
+  <div [hidden]="!isLoading">
+
+    <div class="flex flex-col items-center justify-center py-32">
+
+      <div
+        class="w-24 h-24 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"
+      ></div>
+
+      <h2 class="mt-8 text-4xl font-bold">
+        Loading Admin Workspace...
+      </h2>
+
+      <p class="text-gray-400 mt-4 text-xl">
+        Fetching enterprise control modules
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <div [hidden]="isLoading">
+
+    <!-- ANALYTICS -->
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+
+      <div
+        *ngFor="let item of analytics"
+        class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-6 shadow-2xl hover:scale-105 transition duration-300"
+      >
+
+        <p class="text-gray-400 text-lg">
+          {{ item.title }}
+        </p>
+
+        <h2 class="text-5xl font-bold mt-4">
+          {{ item.value }}
+        </h2>
+
+      </div>
+
+    </div>
+
+    <!-- EMPLOYEE MANAGEMENT -->
+
+    <div
+      class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-2xl mb-10"
+    >
+
+      <div class="flex items-center justify-between mb-8">
+
+        <h2 class="text-3xl font-bold">
+          Employee Management
+        </h2>
+
+        <button
+          (click)="openEmployeeModal()"
+          class="px-5 py-3 rounded-2xl bg-orange-500 hover:bg-orange-600 transition duration-300 font-semibold"
+        >
+          Add Employee
+        </button>
+
+      </div>
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full">
+
+          <thead>
+
+            <tr class="border-b border-gray-700 text-left">
+
+              <th class="pb-5">Employee ID</th>
+              <th class="pb-5">Name</th>
+              <th class="pb-5">Department</th>
+              <th class="pb-5">Status</th>
+              <th class="pb-5">Role</th>
+              <th class="pb-5">Actions</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="let employee of employees"
+              class="border-b border-gray-800 hover:bg-white/5 transition duration-300"
+            >
+
+              <td class="py-5">
+                {{ employee.id }}
+              </td>
+
+              <td class="py-5 font-semibold">
+                {{ employee.name }}
+              </td>
+
+              <td class="py-5">
+                {{ employee.department }}
+              </td>
+
+              <td class="py-5">
+
+                <span
+                  class="px-4 py-2 rounded-full text-sm"
+
+                  [class.bg-green-500/20]="employee.status === 'Active'"
+                  [class.text-green-400]="employee.status === 'Active'"
+
+                  [class.bg-red-500/20]="employee.status === 'Inactive'"
+                  [class.text-red-400]="employee.status === 'Inactive'"
+
+                  [class.bg-yellow-500/20]="employee.status === 'On Leave'"
+                  [class.text-yellow-400]="employee.status === 'On Leave'"
+                >
+                  {{ employee.status }}
+                </span>
+
+              </td>
+
+              <td class="py-5">
+                {{ employee.role }}
+              </td>
+
+              <td class="py-5">
+
+                <div class="flex gap-3">
+
+                  <button
+                    class="px-4 py-2 rounded-xl bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition duration-300"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    (click)="deactivateEmployee(employee.id)"
+                    class="px-4 py-2 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 transition duration-300"
+                  >
+                    Deactivate
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <!-- TASK + DEVICE -->
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
+
+      <!-- TASK MANAGEMENT -->
+
+      <div
+        class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-2xl"
+      >
+
+        <div class="flex items-center justify-between mb-8">
+
+          <h2 class="text-3xl font-bold">
+            Task Management
+          </h2>
+
+          <button
+            (click)="openTaskModal()"
+            class="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 transition duration-300"
+          >
+            Assign Task
+          </button>
+
+        </div>
+
+        <div class="space-y-5">
+
+          <div
+            *ngFor="let task of tasks"
+            class="bg-white/5 rounded-2xl p-5 border border-white/10"
+          >
+
+            <div class="flex items-center justify-between">
+
+              <div>
+
+                <h3 class="text-2xl font-semibold">
+                  {{ task.title }}
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                  Assigned To: {{ task.assignedTo }}
+                </p>
+
+              </div>
+
+              <div class="text-right">
+
+                <div
+                  class="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 inline-block"
+                >
+                  {{ task.status }}
+                </div>
+
+                <p class="text-orange-400 mt-3">
+                  {{ task.priority }}
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- DEVICE MANAGEMENT -->
+
+      <div
+        class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-2xl"
+      >
+
+        <div class="flex items-center justify-between mb-8">
+
+          <h2 class="text-3xl font-bold">
+            Device Allocation
+          </h2>
+
+          <button
+            class="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 transition duration-300"
+          >
+            Assign Device
+          </button>
+
+        </div>
+
+        <div class="space-y-5">
+
+          <div
+            *ngFor="let device of devices"
+            class="bg-white/5 rounded-2xl p-5 border border-white/10"
+          >
+
+            <div class="flex items-center justify-between">
+
+              <div>
+
+                <h3 class="text-2xl font-semibold">
+                  {{ device.device }}
+                </h3>
+
+                <p class="text-gray-400 mt-2">
+                  Assigned To: {{ device.employee }}
+                </p>
+
+              </div>
+
+              <div
+                class="px-4 py-2 rounded-full bg-green-500/20 text-green-400"
+              >
+                {{ device.status }}
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ADD EMPLOYEE MODAL -->
+
+  <div
+    *ngIf="showEmployeeModal"
+    class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+  >
+
+    <div
+      class="bg-[#111827] w-[500px] rounded-3xl p-8 border border-white/10 shadow-2xl"
+    >
+
+      <div class="flex items-center justify-between mb-8">
+
+        <h2 class="text-3xl font-bold">
+          Add Employee
+        </h2>
+
+        <button
+          (click)="closeEmployeeModal()"
+          class="text-gray-400 hover:text-white text-2xl"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div class="space-y-5">
+
+        <input
+          [(ngModel)]="newEmployee.id"
+          type="text"
+          placeholder="Employee ID"
+          class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none"
+        />
+
+        <input
+          [(ngModel)]="newEmployee.name"
+          type="text"
+          placeholder="Employee Name"
+          class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none"
+        />
+
+        <input
+          [(ngModel)]="newEmployee.department"
+          type="text"
+          placeholder="Department"
+          class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none"
+        />
+
+        <input
+          [(ngModel)]="newEmployee.role"
+          type="text"
+          placeholder="Role"
+          class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none"
+        />
+
+        <button
+          (click)="addEmployee()"
+          class="w-full bg-orange-500 hover:bg-orange-600 transition duration-300 rounded-2xl py-4 font-semibold text-lg"
+        >
+          Add Employee
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TASK MODAL -->
+
+  @if(showTaskModal) {
+
+  <div
+    class="fixed inset-0 bg-black/70
+           flex items-center justify-center z-50"
+  >
+
+    <div
+      class="bg-[#111827]
+             w-[500px]
+             rounded-3xl
+             p-8
+             border border-white/10
+             shadow-2xl"
+    >
+
+      <div class="flex items-center justify-between mb-8">
+
+        <h2 class="text-3xl font-bold">
+          Assign Task
+        </h2>
+
+        <button
+          (click)="closeTaskModal()"
+          class="text-gray-400 hover:text-white text-2xl"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div class="space-y-5">
+
+        <input
+          [(ngModel)]="newTask.title"
+          type="text"
+          placeholder="Task Title"
+          class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none"
+        />
+
+        <select
+  [(ngModel)]="newTask.assignedTo"
+  class="w-full
+         bg-[#1F2937]
+         text-white
+         border border-white/10
+         rounded-2xl
+         px-5 py-4
+         outline-none"
+>
+
+  <option value="">
+    Assign To
+  </option>
+
+  <option
+    *ngFor="let employee of employees"
+
+    [value]="employee.name"
+
+    [disabled]="employee.status !== 'Active'"
+
+    class="bg-[#111827] text-white"
+  >
+
+    {{ employee.name }}
+
+    -
+
+    {{ employee.status }}
+
+  </option>
+
+</select>
+
+       <select
+       [(ngModel)]="newTask.priority"
+       class="w-full
+       bg-[#1F2937]
+        text-white
+        border border-white/10
+        rounded-2xl
+        px-5 py-4
+        outline-none"
+        >
+        <option
+        value=""
+        disabled
+        selected
+        class="bg-[#111827] text-white"
+        >
+        Select Priority
+      </option>
+      <option
+      value="High"
+      class="bg-[#111827] text-white"
+      >High</option>
+      <option
+      value="Medium"
+      class="bg-[#111827] text-white"
+      >Medium</option>
+      <option
+      value="Low"
+      class="bg-[#111827] text-white">Low</option>
+    </select>
+        <select
+  [(ngModel)]="newTask.status"
+  class="w-full
+         bg-[#1F2937]
+         text-white
+         border border-white/10
+         rounded-2xl
+         px-5 py-4
+         outline-none"
+>
+
+  <option
+    value=""
+    disabled
+    selected
+    class="bg-[#111827] text-white"
+  >
+    Select Status
+  </option>
+
+  <option
+    value="Pending"
+    class="bg-[#111827] text-white"
+  >
+    Pending
+  </option>
+
+  <option
+    value="In Progress"
+    class="bg-[#111827] text-white"
+  >
+    In Progress
+  </option>
+
+  <option
+    value="Completed"
+    class="bg-[#111827] text-white"
+  >
+    Completed
+  </option>
+
+</select>
+
+        <button
+          (click)="assignTask()"
+          class="w-full bg-orange-500 hover:bg-orange-600 transition duration-300 rounded-2xl py-4 font-semibold text-lg"
+        >
+          Assign Task
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  }
+
+</div>

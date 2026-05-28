@@ -1,0 +1,131 @@
+{
+  "employeeProfile": {
+
+    "employeeId": "EMP-2026-01",
+
+    "department": "Engineering",
+
+    "workMode": "Hybrid",
+
+    "joiningDate": "12 Jan 2026",
+
+    "designation": "Frontend Developer"
+
+  },
+
+
+
+  "employeeStats": [
+
+    {
+      "title": "Paid Leaves",
+      "value": 12
+    },
+
+    {
+      "title": "Medical Leaves",
+      "value": 7
+    },
+
+    {
+      "title": "Assigned Tasks",
+      "value": 5
+    },
+
+    {
+      "title": "Company Assets",
+      "value": 2
+    }
+
+  ],
+
+
+
+  "tasks": [
+
+    {
+      "title": "Frontend Dashboard UI",
+      "priority": "High",
+      "status": "In Progress"
+    },
+
+    {
+      "title": "Authentication API",
+      "priority": "Medium",
+      "status": "Pending"
+    },
+
+    {
+      "title": "Employee Report Module",
+      "priority": "Low",
+      "status": "Completed"
+    }
+
+  ],
+
+
+
+  "salaryDetails": {
+
+    "basic": "₹65,000",
+
+    "hra": "₹20,000",
+
+    "pf": "₹7,500",
+
+    "bonus": "₹10,000"
+
+  },
+
+
+
+  "holidays": [
+
+    {
+      "name": "Independence Day",
+      "date": "15 Aug 2026"
+    },
+
+    {
+      "name": "Ganesh Chaturthi",
+      "date": "27 Aug 2026"
+    },
+
+    {
+      "name": "Gandhi Jayanti",
+      "date": "2 Oct 2026"
+    }
+
+  ],
+
+
+
+  "meetings": [
+
+    {
+      "meetingId": "M-101",
+      "title": "Sprint Planning",
+      "team": "Frontend Team",
+      "time": "10:00 AM",
+      "status": "Upcoming"
+    },
+
+    {
+      "meetingId": "M-102",
+      "title": "HR Policy Review",
+      "team": "HR Team",
+      "time": "1:00 PM",
+      "status": "Completed"
+    },
+
+    {
+      "meetingId": "M-103",
+      "title": "Client Discussion",
+      "team": "Product Team",
+      "time": "4:30 PM",
+      "status": "Pending"
+    }
+
+  ]
+
+}
