@@ -4,6 +4,10 @@ An enterprise-grade Single Page Application (SPA) built using **Angular 19**, **
 
 ---
 ---
+# Live Vercel Deployment
+https://nsqtech-enterprise-workforce-portal.vercel.app/login
+---
+---
 # Demo Credentials
 
 The application currently uses a dummy authentication system with locally stored JSON-based credentials for demonstration purposes.
