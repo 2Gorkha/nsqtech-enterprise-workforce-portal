@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class EmployeeService {
 
-  apiUrl = 'https://nsqtech-enterprise-workforce-portal.onrender.com';
+  apiUrl = 'https://nsqtech-enterprise-workforce-portal.onrender.com/api/employees';
 
   constructor(private http: HttpClient) {}
 
